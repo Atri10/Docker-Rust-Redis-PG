@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+
+  rust-server:
+    build: .
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - redis
+      - postgres
+
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_USER: root
+      PG_PASSWORD: root
+      PG_DB: AppDB
+      RED_HOST: redis
+      RED_PORT: 6379
+
+    networks:
+      - App_Network
+
+    volumes:
+      - rust-server-data:/usr/src/redis-curd/data
+
+
+  postgres:
+    image: postgres:latest
+
+    restart: always
+
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: AppDB
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+    networks:
+      - App_Network
+
+
+
+
+  redis:
+
+    image: redis/redis-stack:latest
+
+    restart: always
+
+    environment:
+      REDIS_ARGS: "--requirepass root"
+
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+    volumes:
+      - redis-data:/data
+
+    networks:
+      - App_Network
+
+
+networks:
+  App_Network:
+
+volumes:
+  rust-server-data:
+  postgres-data:
+  redis-data:
