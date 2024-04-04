@@ -2,10 +2,13 @@ use std::thread::current;
 use std::time::Duration;
 use dotenv::dotenv;
 use crate::cache::redis::RedisCache;
-use log::{debug, info, LevelFilter, warn};
+use log::debug;
+use log::LevelFilter;
 
 
 mod cache;
+mod error;
+
 
 fn main() {
     dotenv().ok();
@@ -20,12 +23,12 @@ fn main() {
     debug!("[{}] Going to Start CURD App", current().name().unwrap());
 
 
-    let redis_cache_client: RedisCache = RedisCache::new(&*redis_url);
+    let mut redis_cache_connection: RedisCache = RedisCache::new(&*redis_url);
 
     let key = "TestKey";
     let value = "TestVal";
     let ttl = Duration::from_secs(3600);
 
-    redis_cache_client.set(key, value, ttl);
-    redis_cache_client.remove(key);
+    redis_cache_connection.set(key, value, ttl);
+    redis_cache_connection.remove(key);
 }

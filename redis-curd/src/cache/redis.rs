@@ -3,9 +3,9 @@ use redis::{Client, Commands, Connection};
 use std::time::Duration;
 use log::{debug, error};
 
-#[derive(Debug)]
+
 pub struct RedisCache {
-    client: Client,
+    connection: Connection,
 }
 
 impl RedisCache {
@@ -22,13 +22,20 @@ impl RedisCache {
 
         debug!("[{}] Successfully Initialized Redis at : {}", current().name().unwrap(),redis_url);
 
-        RedisCache { client }
+
+        let connection: Connection = match client.get_connection() {
+            Ok(connection) => connection,
+            Err(err) => {
+                error!("[{}] Error connecting to Redis Client: {:?}. Error : {}",current().name().unwrap(),client, err);
+                panic!("[{}] Error connecting to Redis Client: {:?}. Error : {}", current().name().unwrap(), client, err);
+            }
+        };
+
+        RedisCache { connection }
     }
 
-    pub fn set(&self, key: &str, val: &str, ttl: Duration) -> bool {
-        let mut connection: Connection = self.get_connection();
-
-        return match connection.set_ex(key, val, ttl.as_secs()) {
+    pub fn set(&mut self, key: &str, val: &str, ttl: Duration) -> bool {
+        return match self.connection.set_ex(key, val, ttl.as_secs()) {
             Ok(()) => {
                 debug!("[{}] Successfully set key : {} in Redis cache", current().name().unwrap(),key);
                 true
@@ -41,22 +48,8 @@ impl RedisCache {
         };
     }
 
-    fn get_connection(&self) -> Connection {
-        let connection: Connection = match self.client.get_connection() {
-            Ok(connection) => connection,
-            Err(err) => {
-                error!("[{}] Error connecting to Redis: {:?}. Error : {}",current().name().unwrap(),self, err);
-                panic!("[{}] Error connecting to Redis: {:?}. Error : {}", current().name().unwrap(), self, err);
-            }
-        };
-
-        connection
-    }
-
-    pub fn remove(&self, key: &str) -> bool {
-        let mut connection: Connection = self.get_connection();
-
-        return match connection.del(key) {
+    pub fn remove(&mut self, key: &str) -> bool {
+        return match self.connection.del(key) {
             Ok(()) => {
                 debug!("[{}] Successfully removed key : {} in Redis cache", current().name().unwrap(),key);
                 return true;
