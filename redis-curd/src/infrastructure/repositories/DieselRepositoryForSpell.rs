@@ -16,8 +16,8 @@ use crate::domain::repositories::repository::RepositoryResult;
 use crate::domain::repositories::SpellRepository::SpellRepository;
 
 use crate::infrastructure::database::PostgresDB::postgreSQL::DBConn;
-use crate::infrastructure::errors::DieselRepositoryError;
-use crate::infrastructure::models::Spell::{CreateSpellDiesel, SpellDiesel};
+use crate::infrastructure::errors::DieselRepositoryError::DieselRepositoryError;
+use crate::infrastructure::models::DieselModelForSpell::{CreateSpellDiesel, SpellDiesel};
 
 pub struct SpellDieselRepository {
     pub PostgresPool: Arc<DBConn>,

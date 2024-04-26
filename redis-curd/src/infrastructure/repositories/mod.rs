@@ -1,2 +1,5 @@
 
-pub mod SpellRepository;
+pub mod DieselRepositoryForSpell;
+
+
+pub mod CacheSupportedRepositoryForSpell;

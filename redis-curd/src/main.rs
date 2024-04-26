@@ -9,9 +9,9 @@ mod tests;
 async fn main() -> std::io::Result<()> {
 
     dotenv().ok();
-    
+
     env_logger::Builder::new().
-        filter_level(LevelFilter::Info).
+        filter_level(LevelFilter::Debug).
         format_timestamp(Some(env_logger::TimestampPrecision::Nanos)).
         init();
     

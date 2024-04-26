@@ -15,7 +15,7 @@ pub fn create_app() -> App<
         Error=Error,
     >
 > {
-    let Spellcontainer: Container = Container::new();
+    let Spellcontainer: Container = Container::CacheSupportedInfra();
 
     let SpellService = Spellcontainer.SpellService.clone();
     

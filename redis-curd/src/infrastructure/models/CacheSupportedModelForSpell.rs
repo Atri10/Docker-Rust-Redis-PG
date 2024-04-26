@@ -1,14 +1,15 @@
 use diesel::{Insertable, Queryable};
-use crate::domain::error::RepositoryError;
+use serde::{Deserialize, Serialize};
 use crate::domain::models::Spell::{CreateSpell, Spell};
 use crate::infrastructure::schema::spells;
 
-#[derive(Queryable)]
+#[derive(Queryable, Clone)]
 pub struct SpellDiesel {
     pub id: i32,
     pub name: String,
     pub power: i64,
 }
+
 
 impl From<Spell> for SpellDiesel {
     fn from(value: Spell) -> Self {
@@ -19,11 +20,6 @@ impl From<Spell> for SpellDiesel {
         }
     }
 }
-
-
-
-
-
 
 
 #[derive(Insertable)]
@@ -57,6 +53,39 @@ impl Into<Spell> for CreateSpellDiesel {
     fn into(self) -> Spell {
         Spell {
             id: 0,
+            name: self.name,
+            power: self.power,
+        }
+    }
+}
+
+
+
+
+
+
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct SpellRedis {
+    pub id: i32,
+    pub name: String,
+    pub power: i64,
+}
+
+impl From<Spell> for SpellRedis {
+    fn from(value: Spell) -> Self {
+        SpellRedis {
+            id: value.id,
+            name: value.name,
+            power: value.power,
+        }
+    }
+}
+
+impl Into<Spell> for SpellRedis {
+    fn into(self) -> Spell {
+        Spell {
+            id: self.id,
             name: self.name,
             power: self.power,
         }
