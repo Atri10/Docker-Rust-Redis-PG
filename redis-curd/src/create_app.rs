@@ -1,4 +1,3 @@
-use std::time::Instant;
 use actix_web::{App, Error, web};
 use actix_web::body::MessageBody;
 use actix_web::dev::{ServiceFactory, ServiceRequest, ServiceResponse};
@@ -23,8 +22,8 @@ pub fn create_app() -> App<
 
     App::new()
         .app_data(web::Data::from(SpellService.clone()))
-        .wrap(Logger::new(r#"[%a] ["%r"] [Response = %s] [Size = %b] "%{Referer}i" "%{User-Agent}i" Processed in %Tms."#))
-        //.wrap(Logger::default())
+        //.wrap(Logger::new(r#"[%a] ["%r"] [Response = %s] [Size = %b] "%{Referer}i" "%{User-Agent}i" Processed in %Dms."#))
+        .wrap(Logger::default())
         .service(
             web::scope("/spells")
                 .route("", web::post().to(createSpellHandler))
@@ -32,4 +31,5 @@ pub fn create_app() -> App<
                 .route("/{id}", web::get().to(GetSpellHandler))
                 .route("/{id}", web::delete().to(RemoveSpell))
         )
+        
 }

@@ -2,6 +2,7 @@ use std::sync::Arc;
 use std::thread::current;
 
 use actix_threadpool::run;
+use actix_web::HttpResponse;
 use async_trait::async_trait;
 
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};

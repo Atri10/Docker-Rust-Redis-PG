@@ -1,0 +1,173 @@
+#appenders:
+#  stdout:
+#    kind: console
+#    encoder:
+#      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] — {m} {n}"
+#
+#
+#  file:
+#    kind: rolling_file
+#    append: true
+#    path: "logs/Application.log"
+#    encoder:
+#      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] — {m} {n}"
+#
+#    policy:
+#      kind: compound
+#      trigger:
+#        kind: size
+#        limit: 10mb
+#
+#      roller:
+#        kind: fixed_window
+#        base: 1
+#        count: 100
+#        pattern: "logs/archive/LogFile.{}.log"
+#
+#
+#root:
+#  level: DEBUG
+#  appenders:
+#    - stdout
+#    - file
+
+
+# Scan this file for changes every 30 seconds
+refresh_rate: 30 seconds
+
+appenders:
+  # Console appender
+  stdout:
+    kind: console
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] [{T}] :: {m} {n}"
+
+  # Trace log appender
+  trace_file:
+    kind: rolling_file
+    path: "logs/trace.log"
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] — {m} {n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb
+      roller:
+        kind: fixed_window
+        base: 1
+        count: 100
+        pattern: "logs/archive/trace.{}.log"
+
+  # Debug log appender
+  debug_file:
+    kind: rolling_file
+    path: "logs/debug.log"
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] — {m} {n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb
+      roller:
+        kind: fixed_window
+        base: 1
+        count: 100
+        pattern: "logs/archive/debug.{}.log"
+
+  # Info log appender
+  info_file:
+    kind: rolling_file
+    path: "logs/info.log"
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{M}:{L}] — {m} {n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb
+      roller:
+        kind: fixed_window
+        base: 1
+        count: 100
+        pattern: "logs/archive/info.{}.log"
+
+  # Warn log appender
+  warn_file:
+    kind: rolling_file
+    path: "logs/warn.log"
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{M}:{L}] — {m} {n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb
+      roller:
+        kind: fixed_window
+        base: 1
+        count: 100
+        pattern: "logs/archive/warn.{}.log"
+
+  # Error log appender
+  error_file:
+    kind: rolling_file
+    path: "logs/error.log"
+    encoder:
+      pattern: "[{h({d(%m-%d-%Y %H:%M:%S.%f)})}] [{({l}):5.5}] [{f}:{L}] — {m} {n}"
+    policy:
+      kind: compound
+      trigger:
+        kind: size
+        limit: 10mb
+      roller:
+        kind: fixed_window
+        base: 1
+        count: 100
+        pattern: "logs/archive/error.{}.log"
+
+# Root logger configuration
+root:
+  level: TRACE
+  appenders:
+    - stdout
+    - loggers
+
+# Logger configurations
+loggers:
+  # Trace logger
+  trace:
+    level: trace
+    appenders:
+      - trace_file
+    additive: true
+
+  # Debug logger
+  debug:
+    level: debug
+    appenders:
+      - debug_file
+    additive: true
+
+  # Info logger
+  info:
+    level: info
+    appenders:
+      - info_file
+    additive: true
+
+  # Warn logger
+  warn:
+    level: warn
+    appenders:
+      - warn_file
+    additive: true
+
+  # Error logger
+  error:
+    level: error
+    appenders:
+      - error_file
+    additive: true
+

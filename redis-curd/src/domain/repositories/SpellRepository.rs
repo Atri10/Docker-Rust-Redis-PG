@@ -1,5 +1,3 @@
-
-
 use async_trait::async_trait;
 use crate::domain::repositories::repository::RepositoryResult;
 use crate::domain::models::Spell::CreateSpell;

@@ -21,5 +21,5 @@ pub async fn GetSpellHandler(SpellService: web::Data<dyn SpellService>, ReqParam
 
 pub async fn RemoveSpell(SpellService: web::Data<dyn SpellService>, ReqParams: web::Path<i32>) -> Result<HttpResponse, ApiError> {
     SpellService.RemoveSpell(ReqParams.into_inner()).await?;
-    Ok(HttpResponse::NoContent().finish())
+    Ok(HttpResponse::Ok().finish())
 }

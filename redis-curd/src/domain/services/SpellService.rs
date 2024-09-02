@@ -1,5 +1,3 @@
-
-
 use async_trait::async_trait;
 use crate::domain::error::Error;
 use crate::domain::models::Spell::{CreateSpell, Spell};
