@@ -1,5 +1,5 @@
 # Stage 1: Build the Rust application
-FROM rust:latest as builder
+FROM rust:1.79.0 AS builder
 
 WORKDIR  /usr/src/redis-curd
 
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y iputils-ping
 
 RUN apt install -y libpq-dev
 
-RUN cargo install diesel_cli --no-default-features --features postgres
+RUN cargo install diesel_cli@2.0.1 --no-default-features --features postgres
 
 RUN cargo clean
 
